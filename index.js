@@ -29,24 +29,24 @@ bot.on("message", function(msg) {
 
     if (msg.content === "ping") {
         bot.sendMessage(msg.channel, "pong");
-        console.log("ponged " + msg.sender)
+        console.log("ponged " + msg.sender.name);
     } else if (msg.content === "face") {
         bot.sendMessage(msg.channel, cool());
-        console.log("sent face to " + msg.sender)
+        console.log("sent face to " + msg.sender.name);
     } else if (msg.content.startsWith("youtube")) {
         var searchterm = msg.content.split(" ").slice(1).join(" ");
         youtubeClient.search(searchterm, 2, function(error, result) {
             if (error) {
                 bot.sendMessage(msg.channel, error);
-                console.log("youtube error from " + msg.sender)
+                console.log("youtube error from " + msg.sender.name);
             } else {
                 try {
                     bot.sendMessage(msg.channel, "https://youtu.be/" + result.items[0].id.videoId);
                     console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender)
                 } catch (err) {
-                    bot.sendMessage(msg.channel, "No results.")
-                    console.log("search term was: " + searchterm)
-                    console.log("error was: " + err)
+                    bot.sendMessage(msg.channel, "No results.");
+                    console.log("search term was: " + searchterm);
+                    console.log("error was: " + err);
                     console.log("results were: " + JSON.stringify(result, null, 2));
                 }
             }
@@ -54,6 +54,20 @@ bot.on("message", function(msg) {
     } //else if (msg.content.startsWith("waifu"))
     //bot.sendFile(msg.channel, "http://vignette2.wikia.nocookie.net/overwatch/images/3/3b/Mei_portrait.png");
     //console.log("waifu-d " + msg.sender)
+    else if (msg.content.startsWith("womp")) {
+        bot.joinVoiceChannel(msg.sender.voiceChannel, function(er, connection) {
+            console.log("channel " + msg.sender.voiceChannel + "joined")
+            connection.playFile("./womp.mp3", function(intent) {
+                intent.on("end", () => {
+                    setTimeout(function() {
+                        bot.leaveVoiceChannel(msg.sender.voiceChannel)
+                        console.log("womped " + msg.sender.name)
+                    }, 2000);
+                });
+            });
+        });
+    } //else if
 });
+
 
 bot.loginWithToken("MjE0ODI2NDA3ODEyMDA1OTA4.CpPzww.WQAVrwaHbTlqiLiOFankkJYPhwo");
