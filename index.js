@@ -51,22 +51,22 @@ bot.on("message", function(msg) {
                 }
             }
         });
-    } //else if (msg.content.startsWith("waifu"))
+    } // else if (msg.content.startsWith("waifu"))
     //bot.sendFile(msg.channel, "http://vignette2.wikia.nocookie.net/overwatch/images/3/3b/Mei_portrait.png");
     //console.log("waifu-d " + msg.sender)
-    else if (msg.content.startsWith("womp")) {
+    /* else if (msg.content.startsWith("womp")) {
         bot.joinVoiceChannel(msg.sender.voiceChannel, function(er, connection) {
             console.log("channel " + msg.sender.voiceChannel + "joined")
             connection.playFile("./womp.mp3", function(intent) {
                 intent.on("end", () => {
                     setTimeout(function() {
-                        bot.leaveVoiceChannel(msg.sender.voiceChannel)
-                        console.log("womped " + msg.sender.name)
+                        bot.leaveVoiceChannel(msg.sender.voiceChannel);
+                        console.log("womped " + msg.sender.name);
                     }, 2000);
                 });
             });
         });
-    } //else if
+    } //else if */
 });
 
 
