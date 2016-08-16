@@ -29,20 +29,31 @@ bot.on("message", function(msg) {
 
     if (msg.content === "ping") {
         bot.sendMessage(msg.channel, "pong");
-    } else if (msg.content === "pong") {
-        bot.sendMessage(msg.channel, "polo");
+        console.log("ponged " + msg.sender)
     } else if (msg.content === "face") {
         bot.sendMessage(msg.channel, cool());
+        console.log("sent face to " + msg.sender)
     } else if (msg.content.startsWith("youtube")) {
         var searchterm = msg.content.split(" ").slice(1).join(" ");
         youtubeClient.search(searchterm, 2, function(error, result) {
             if (error) {
                 bot.sendMessage(msg.channel, error);
+                console.log("youtube error from " + msg.sender)
             } else {
-                bot.sendMessage(msg.channel, "https://youtu.be/" + result.items[0].id.videoId);
+                try {
+                    bot.sendMessage(msg.channel, "https://youtu.be/" + result.items[0].id.videoId);
+                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender)
+                } catch (err) {
+                    bot.sendMessage(msg.channel, "No results.")
+                    console.log("search term was: " + searchterm)
+                    console.log("error was: " + err)
+                    console.log("results were: " + JSON.stringify(result, null, 2));
+                }
             }
         });
-    }
+    } //else if (msg.content.startsWith("waifu"))
+    //bot.sendFile(msg.channel, "http://vignette2.wikia.nocookie.net/overwatch/images/3/3b/Mei_portrait.png");
+    //console.log("waifu-d " + msg.sender)
 });
 
 bot.loginWithToken("MjE0ODI2NDA3ODEyMDA1OTA4.CpPzww.WQAVrwaHbTlqiLiOFankkJYPhwo");
