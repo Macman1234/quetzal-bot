@@ -1,3 +1,4 @@
+var fs = require('fs');
 var cool = require('cool-ascii-faces');
 var Discord = require("discord.js");
 var YouTube = require('youtube-node');
@@ -9,11 +10,11 @@ var youtubeClient = new YouTube();
 youtubeClient.setKey('AIzaSyCdOuxh7jgLDXUxaM630eU4jx-MybF76q0');
 
 //when the bot is ready
-bot.on("ready", () => {
-    console.log(`Ready to begin! Serving in ${bot.channels.length} channels`);
+bot.on("ready", function() {
+    console.log("Ready to begin! Serving in " + bot.channels.length() + " channels");
 });
 
-bot.on("disconnected", () => {
+bot.on("disconnected", function() {
     //alert the console
     console.log("Disconnected!");
 
@@ -42,7 +43,7 @@ bot.on("message", function(msg) {
             } else {
                 try {
                     bot.sendMessage(msg.channel, "https://youtu.be/" + result.items[0].id.videoId);
-                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender)
+                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender);
                 } catch (err) {
                     bot.sendMessage(msg.channel, "No results.");
                     console.log("search term was: " + searchterm);
@@ -51,13 +52,11 @@ bot.on("message", function(msg) {
                 }
             }
         });
-    } // else if (msg.content.startsWith("waifu"))
-    //bot.sendFile(msg.channel, "http://vignette2.wikia.nocookie.net/overwatch/images/3/3b/Mei_portrait.png");
-    //console.log("waifu-d " + msg.sender)
+    }
     /* else if (msg.content.startsWith("womp")) {
         bot.joinVoiceChannel(msg.sender.voiceChannel, function(er, connection) {
             console.log("channel " + msg.sender.voiceChannel + "joined")
-            connection.playFile("./womp.mp3", function(intent) {
+            connection.playFile("../womp.mp3", function(intent) {
                 intent.on("end", () => {
                     setTimeout(function() {
                         bot.leaveVoiceChannel(msg.sender.voiceChannel);
@@ -66,7 +65,8 @@ bot.on("message", function(msg) {
                 });
             });
         });
-    } //else if */
+    }
+    */
 });
 
 
