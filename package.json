@@ -1,6 +1,6 @@
 {
   "name": "quetzal-bot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A test Discord bot using Node.js",
   "engines": {
     "node": "6.3.1"

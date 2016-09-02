@@ -43,7 +43,7 @@ bot.on("message", function(msg) {
             } else {
                 try {
                     bot.sendMessage(msg.channel, "https://youtu.be/" + result.items[0].id.videoId);
-                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender);
+                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender.name);
                 } catch (err) {
                     bot.sendMessage(msg.channel, "No results.");
                     console.log("search term was: " + searchterm);
