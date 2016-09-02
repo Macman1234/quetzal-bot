@@ -11,7 +11,7 @@ youtubeClient.setKey('AIzaSyCdOuxh7jgLDXUxaM630eU4jx-MybF76q0');
 
 //when the bot is ready
 bot.on("ready", function() {
-    console.log("Ready to begin! Serving in " + bot.channels.length() + " channels");
+    console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
 });
 
 bot.on("disconnected", function() {
