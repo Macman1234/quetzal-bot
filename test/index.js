@@ -11,7 +11,7 @@ youtubeClient.setKey('AIzaSyCdOuxh7jgLDXUxaM630eU4jx-MybF76q0');
 
 //when the bot is ready
 bot.on("ready", function() {
-    console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
+    console.log("Ready to begin! Serving in " + bot.channels.array() + " channels");
 });
 
 bot.on("disconnected", function() {
@@ -29,46 +29,39 @@ bot.on("message", function(msg) {
     msg.content = msg.content.substr(1);
 
     if (msg.content === "ping") {
-        bot.sendMessage(msg.channel, "pong");
-        console.log("ponged " + msg.sender.name);
+        msg.channel.sendMessage("pong");
+        console.log("ponged " + msg.author.username);
     } else if (msg.content === "face") {
         var face = cool();
-        bot.sendMessage(msg.channel, face);
-        console.log("sent face to " + msg.sender.name);
+        msg.channel.sendMessage(face);
+        console.log("sent face to " + msg.author.username);
     } else if (msg.content.startsWith("youtube")) {
         var searchterm = msg.content.split(" ").slice(1).join(" ");
         youtubeClient.search(searchterm, 2, function(error, result) {
             if (error) {
-                bot.sendMessage(msg.channel, error);
-                console.log("youtube error from " + msg.sender.name);
+                msg.channel.sendMessage(error);
+                console.log("youtube error from " + msg.author.username);
             } else {
                 try {
-                    bot.sendMessage(msg.channel, "https://youtu.be/" + result.items[0].id.videoId);
-                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.sender.name);
+                    msg.channel.sendMessage("https://youtu.be/" + result.items[0].id.videoId);
+                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm);
                 } catch (err) {
-                    bot.sendMessage(msg.channel, "No results.");
+                    msg.channel.sendMessage("No results.");
                     console.log("search term was: " + searchterm);
                     console.log("error was: " + err);
                     console.log("results were: " + JSON.stringify(result, null, 2));
                 }
             }
         });
-    }
-    /* else if (msg.content.startsWith("womp")) {
-        bot.joinVoiceChannel(msg.sender.voiceChannel, function(er, connection) {
-            console.log("channel " + msg.sender.voiceChannel + "joined")
-            connection.playFile("../womp.mp3", function(intent) {
-                intent.on("end", () => {
-                    setTimeout(function() {
-                        bot.leaveVoiceChannel(msg.sender.voiceChannel);
-                        console.log("womped " + msg.sender.name);
-                    }, 2000);
-                });
-            });
-        });
-    }
-    */
+    } /*else if (msg.content.startsWith("womp")) {
+                   bot.joinVoiceChannel(msg.sender.voiceChannel, function(er, connection) {
+                       console.log("channel " + msg.sender.voiceChannel + "joined");
+                       connection.playFile("womp.mp3", function() {
+                         console.log("test");
+                       });
+                   });
+               } */
 });
 
 
-bot.loginWithToken("MjE0ODI2NDA3ODEyMDA1OTA4.CpPzww.WQAVrwaHbTlqiLiOFankkJYPhwo");
+bot.login("MjE0ODI2NDA3ODEyMDA1OTA4.CpPzww.WQAVrwaHbTlqiLiOFankkJYPhwo");
