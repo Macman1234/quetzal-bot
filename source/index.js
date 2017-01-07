@@ -41,7 +41,7 @@ server.listen(app.get('port'), function() {
 
 io.sockets.on('connection', function(socket) {
     socket.on('message', function(message) {
-        fs.readFile('log.txt', (err, data) => {
+        fs.readFile(__dirname + '/log.txt', (err, data) => {
             if (err) throw err;
             io.sockets.emit('update', data.toString());
         });
@@ -69,14 +69,14 @@ bot.on("message", function(msg) {
     if (msg.content === "ping") {
         msg.channel.sendMessage("pong");
         console.log("ponged " + msg.author.username);
-        fs.appendFile('log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ": ponged " + msg.author.username + '\n', (err) => {
+        fs.appendFile(__dirname + '/log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ": ponged " + msg.author.username + '\n', (err) => {
             if (err) throw err;
         });
     } else if (msg.content === "face") {
         var face = cool();
         msg.channel.sendMessage(face);
         console.log("sent face to " + msg.author.username);
-        fs.appendFile('log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ': sent face to ' + msg.author.username + '\n', (err) => {
+        fs.appendFile(__dirname + '/log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ': sent face to ' + msg.author.username + '\n', (err) => {
             if (err) throw err;
         });
     } else if (msg.content.startsWith("youtube")) {
@@ -85,14 +85,14 @@ bot.on("message", function(msg) {
             if (error) {
                 msg.channel.sendMessage(error);
                 console.log("youtube error from " + msg.author.username);
-                fs.appendFile('log.txt', "youtube error from " + msg.author.username + '\n', (err) => {
+                fs.appendFile(__dirname + '/log.txt', "youtube error from " + msg.author.username + '\n', (err) => {
                     if (err) throw err;
                 });
             } else {
                 try {
                     msg.channel.sendMessage("https://youtu.be/" + result.items[0].id.videoId);
                     console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm);
-                    fs.appendFile('log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ": youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm + '\n', (err) => {
+                    fs.appendFile(__dirname + '/log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ": youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm + '\n', (err) => {
                         if (err) throw err;
                     });
                 } catch (err) {
@@ -108,4 +108,4 @@ bot.on("message", function(msg) {
 });
 
 
-bot.login("MjE0ODI2NDA3ODEyMDA1OTA4.C1LoFw.7xar4sqNLuwuBMwhok1HqhdV09Q");
+bot.login("");
