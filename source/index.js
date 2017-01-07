@@ -53,15 +53,8 @@ bot.on("message", function(msg) {
                 }
             }
         });
-    } /*else if (msg.content.startsWith("womp")) {
-                   bot.joinVoiceChannel(msg.sender.voiceChannel, function(er, connection) {
-                       console.log("channel " + msg.sender.voiceChannel + "joined");
-                       connection.playFile("womp.mp3", function() {
-                         console.log("test");
-                       });
-                   });
-               } */
+    }
 });
 
 
-bot.login("MjE0ODI2NDA3ODEyMDA1OTA4.CpPzww.WQAVrwaHbTlqiLiOFankkJYPhwo");
+bot.login("TODO: READ THIS FROM A FILE SO I DON'T HAVE TO COPYPASTE IT EACH TIME");
