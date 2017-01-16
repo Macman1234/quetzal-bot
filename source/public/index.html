@@ -11,39 +11,38 @@
 <script>
     var socket = io.connect();
     socket.on('connect', function() {
-        window.setInterval(function() {
-            socket.send("ping");
-        }, 5000);
-        var oldcontent = ''
-        socket.on('update', function(msg) {
-            var tosend = msg.replace(/\n/g, '<br>')
-            if (tosend === oldcontent) {
-                console.log('no change');
-            } else {
-                $('#update').html(tosend);
-                console.log('updating with: ' + tosend);
-                if (oldcontent !== '') {
-                    $("#button").fadeIn()
-                }
-            }
-            oldcontent = tosend;
+        socket.on('begin', function(msg) {
+            var tosend = msg.replace(/\n/g, '<br>');
+            $('#update').html(tosend);
+            console.log('starting page with: ' + tosend);
         });
-        socket.send("ping");
+        socket.on('update', function(msg) {
+            var tosend = msg.replace(/\n/g, '<br>');
+            $('#update').html(tosend);
+            console.log('updating with: ' + tosend);
+            $("#button").fadeIn();
+        });
+
         $("#update").scrollTop($("#update").get(0).scrollHeight);
-        $("#button").fadeOut(0)
+        $("#button").fadeOut(0);
     });
     $(document).ready(function() {
         $("#button").click(function() {
             $("#update").scrollTop($("#update").get(0).scrollHeight);
-            $("#button").fadeOut(0)
+            $("#button").fadeOut(0);
         });
     });
 </script>
 
 <body>
-    <h1>quetzal-bot log</h1>
-    <div id="update"></div>
-    <button id="button"></button>
+    <h1>Quetzal Discord Bot Log</h1>
+    <div class="flex-container" id="horizontal">
+        <div id="update"></div>
+        <button id="button"></button>
+    </div>
 </body>
+
+</html>
+
 
 </html>

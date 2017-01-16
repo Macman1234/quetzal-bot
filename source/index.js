@@ -40,24 +40,36 @@ server.listen(app.get('port'), function() {
 });
 
 io.sockets.on('connection', function(socket) {
-    socket.on('message', function(message) {
-        fs.readFile(__dirname + '/log.txt', (err, data) => {
-            if (err) throw err;
-            io.sockets.emit('update', data.toString());
-        });
+    fs.readFile(__dirname + '/log.txt', (err, data) => {
+        if (err) throw err;
+        io.sockets.emit('begin', data.toString());
     });
 });
 
+fs.watch(__dirname + '/log.txt', (type, name) => {
+    fs.readFile(__dirname + '/log.txt', (err, data) => {
+        if (err) throw err;
+        io.sockets.emit('update', data.toString());
+    });
+});
+
+var logtofile = function(text, callback) {
+    let textwithtimestamp = moment().format('MM/DD/YYYY, h:mm:ss a') + ' : ' + text;
+    fs.appendFile(__dirname + '/log.txt', textwithtimestamp + '\n', (err) => {
+        if (err) throw err;
+    });
+    if (callback) {
+        callback();
+    }
+};
+
 bot.on("ready", function() {
-    console.log("Ready to begin! Serving in " + bot.channels.array() + " channels");
+    //console.log("Ready to begin! Serving in " + bot.channels.array() + " channels");
+    logtofile("Starting bot! Serving in " + bot.channels.array().length + " channels");
 });
 
 bot.on("disconnected", function() {
-    //alert the console
-    console.log("Disconnected!");
-
-    //exit node.js with an error
-    process.exit(1);
+    logtofile('bot was disconnected!', process.exit(1));
 });
 
 
@@ -68,44 +80,31 @@ bot.on("message", function(msg) {
 
     if (msg.content === "ping") {
         msg.channel.sendMessage("pong");
-        console.log("ponged " + msg.author.username);
-        fs.appendFile(__dirname + '/log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ": ponged " + msg.author.username + '\n', (err) => {
-            if (err) throw err;
-        });
+        logtofile("ponged " + msg.author.username);
     } else if (msg.content === "face") {
         var face = cool();
         msg.channel.sendMessage(face);
-        console.log("sent face to " + msg.author.username);
-        fs.appendFile(__dirname + '/log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ': sent face to ' + msg.author.username + '\n', (err) => {
-            if (err) throw err;
-        });
+        logtofile('sent face to ' + msg.author.username);
     } else if (msg.content.startsWith("youtube")) {
         var searchterm = msg.content.split(" ").slice(1).join(" ");
         youtubeClient.search(searchterm, 2, function(error, result) {
             if (error) {
                 msg.channel.sendMessage(error);
-                console.log("youtube error from " + msg.author.username);
-                fs.appendFile(__dirname + '/log.txt', "youtube error from " + msg.author.username + '\n', (err) => {
-                    if (err) throw err;
-                });
+                logtofile('error ' + error + ' thrown');
             } else {
-                try {
+                if (result.items[0].id.videoId) {
                     msg.channel.sendMessage("https://youtu.be/" + result.items[0].id.videoId);
-                    console.log("youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm);
-                    fs.appendFile(__dirname + '/log.txt', moment().format('MM/DD/YYYY, h:mm:ss a') + ": youtube url " + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm + '\n', (err) => {
-                        if (err) throw err;
-                    });
-                } catch (err) {
+                    logtofile('youtube url ' + "https://youtu.be/" + result.items[0].id.videoId + " sent to " + msg.author.username + ", search term was: " + searchterm);
+                } else {
                     msg.channel.sendMessage("No results.");
-                    console.log("search term was: " + searchterm);
-                    console.log("error was: " + err);
-                    console.log("results were: " + JSON.stringify(result, null, 2));
-
+                    logtofile(msg.author.username + " got no search results, search term was: " + searchterm);
                 }
             }
         });
     }
 });
 
-
-bot.login("");
+fs.readFile(__dirname + '/key.txt', (err, data) => {
+    key = data.toString();
+    bot.login(key);
+});
