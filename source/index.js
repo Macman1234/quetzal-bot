@@ -64,7 +64,7 @@ var logtofile = function(text, callback) {
 };
 
 bot.on("ready", function() {
-    //console.log("Ready to begin! Serving in " + bot.channels.array() + " channels");
+    console.log("Ready to begin! Serving in " + bot.channels.array() + " channels");
     logtofile("Starting bot! Serving in " + bot.channels.array().length + " channels");
 });
 
@@ -106,5 +106,6 @@ bot.on("message", function(msg) {
 
 fs.readFile(__dirname + '/key.txt', (err, data) => {
     key = data.toString();
+    key = key.replace(/\n/g, '');
     bot.login(key);
 });
