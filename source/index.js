@@ -81,6 +81,9 @@ bot.on("message", function(msg) {
     if (msg.content === "ping") {
         msg.channel.sendMessage("pong");
         logtofile("ponged " + msg.author.username);
+    } else if (msg.content === "help") {
+        msg.channel.sendMessage("Hello! I'm a bot made by Macman1223. I'll write up documentation for what I can do later. To add me to a server, go to https://discordapp.com/oauth2/authorize?client_id=INSERT_CLIENT_ID_HERE&scope=bot&permissions=37223488");
+        logtofile('sent face to ' + msg.author.username);
     } else if (msg.content === "face") {
         var face = cool();
         msg.channel.sendMessage(face);
